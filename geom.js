@@ -42,7 +42,7 @@ function draw_line(ctx, a, b, style) {
     ctx.stroke();
 }
 
-function convexHull(points_) {
+function convexHull(points_, ctx) {
     var ch = [];
     if(points_.length < 3)
         return ch;
@@ -70,18 +70,23 @@ function convexHull(points_) {
 
     // sort points according to angle
     points.sort(function(a, b) {
-        return cos_angle(a) < cos_angle(b);
+        return cos_angle(a) < cos_angle(b) ? 1 : -1;
     });
     points.unshift(min_pt);
 
-    // draw_line(ctx, min_pt, points[1], 'black');
-    for(var i = 1; i < points.length-1; ++i) {
-        // ctx.strokeStyle = 'red';
-        // ctx.strokeText(i.toString(), points[i].x+4, points[i].y);
-        var prev = sub2(points[i], points[i-1]);
-        var next = sub2(points[i+1], points[i]);
-        var is_convex = sin_a(prev, next) > 0;
-        // draw_line(ctx, points[i], points[i+1], is_convex ? 'green' : 'red');
+    if(false) {
+        ctx.strokeText("min_pt", min_pt.x+4, min_pt.y);
+        draw_line(ctx, min_pt, points[1], 'black');
+        for(var i = 1; i < points.length-1; ++i) {
+            ctx.strokeStyle = 'red';
+            var pt = points[i];
+            var str = i.toString() + " (" + pt.x.toString() + ", " + pt.y.toString() + ")"
+            ctx.strokeText(str, points[i].x+4, points[i].y);
+            var prev = sub2(points[i], points[i-1]);
+            var next = sub2(points[i+1], points[i]);
+            var is_convex = sin_a(prev, next) > 0;
+            draw_line(ctx, points[i], points[i+1], is_convex ? 'green' : 'red');
+        }
     }
 
     //first and second point in sorted array always belong to CH
@@ -141,10 +146,12 @@ function draw_point(ctx, pt, radius, color) {
     ctx.stroke();
 }
 
-function draw_points(ctx, points) {
+function draw_points(ctx, points, colour) {
     for(var i = 0; i < points.length; ++i)
-        draw_point(ctx, points[i], 3, 'red');
+        draw_point(ctx, points[i], 3, colour);
 }
+
+//var test_points = JSON.parse('[{"x":384,"y":75},{"x":591,"y":196},{"x":243,"y":454},{"x":203,"y":249},{"x":635,"y":483},{"x":460,"y":298},{"x":711,"y":294},{"x":434,"y":489},{"x":196,"y":330},{"x":228,"y":188},{"x":557,"y":291},{"x":325,"y":298}]');
 
 function init(){
     var canvas = document.getElementById('viewer');
@@ -154,12 +161,12 @@ function init(){
 
     canvas.addEventListener('mousedown', function(evt){
         points.push(getMousePos(canvas, evt));
+        console.log(JSON.stringify(points));
         ctx.clearRect(0,0,canvas.width,canvas.height);
 
         hull = convexHull(points, ctx);
         draw_polygon(ctx, hull, 'green');
-        for (var i = 0; i < points.length; i++)
-            draw_point(ctx, points[i], 3, 'blue');
-        draw_points(ctx, hull);
+        draw_points(ctx, points, 'blue');
+        draw_points(ctx, hull, 'red');
     });
 }
