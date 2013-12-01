@@ -47,9 +47,7 @@ function convexHull(points_, ctx) {
         return points_;
 
     // make a copy of points
-    var points = [];
-    for(var i = 0; i < points_.length; ++i)
-        points.push(copy_vec_2(points_[i]));
+    var points = points_.slice(0);
 
     // find the bottommost point
     var idx = 0;
@@ -59,8 +57,6 @@ function convexHull(points_, ctx) {
 
     // remove this point from array
     var min_pt = points.splice(idx, 1)[0];
-
-    // ctx.strokeText("min_pt", min_pt.x+4, min_pt.y);
 
     var cos_angle = function(pt) {
         var v = sub2(pt, min_pt);
