@@ -43,9 +43,8 @@ function draw_line(ctx, a, b, style) {
 }
 
 function convexHull(points_, ctx) {
-    var ch = [];
     if(points_.length < 3)
-        return ch;
+        return points_;
 
     // make a copy of points
     var points = [];
@@ -90,7 +89,7 @@ function convexHull(points_, ctx) {
     }
 
     //first and second point in sorted array always belong to CH
-    ch = [points[0], points[1]];
+    var ch = [points[0], points[1]];
     for(var i = 1; i < points.length-1;) {
         var prev = sub2(ch[ch.length-1], ch[ch.length-2]);
         var next = sub2(points[i+1], ch[ch.length-1]);
