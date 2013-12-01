@@ -70,7 +70,7 @@ function convexHull(points_, ctx) {
 
     // sort points according to angle
     points.sort(function(a, b) {
-        return cos_angle(a) < cos_angle(b) ? 1 : -1;
+        return cos_angle(b) - cos_angle(a);
     });
     points.unshift(min_pt);
 
@@ -161,7 +161,6 @@ function init(){
 
     canvas.addEventListener('mousedown', function(evt){
         points.push(getMousePos(canvas, evt));
-        console.log(JSON.stringify(points));
         ctx.clearRect(0,0,canvas.width,canvas.height);
 
         hull = convexHull(points, ctx);
