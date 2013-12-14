@@ -99,31 +99,6 @@ function convexHull(points_, ctx) {
     return ch;
 }
 
-/* Implementation using doubly-linked lists
-
-    var head = ddl_array_to_list(points);
-    var prev_n = ddl_get_next(head);
-    var next_n = null;
-    while(next_n != head) {
-        var curr_n = ddl_get_next(prev_n);
-        next_n = ddl_get_next(curr_n);
-
-        var prev = sub2(curr_n.data, prev_n.data);
-        var next = sub2(next_n.data, curr_n.data);
-
-        var is_convex = sin_a(prev, next) > 0;
-        if(!is_convex)
-        {
-            ddl_remove_node(curr_n);
-            prev_n = ddl_get_prev(prev_n);
-        }
-        else
-            prev_n = curr_n;
-    }
-    return head;
-*/
-
-
 function draw_polygon(ctx, points, colour) {
     ctx.lineWidth = 3;
     for(var i = 0; i < points.length; ++i)
