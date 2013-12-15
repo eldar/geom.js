@@ -39,8 +39,13 @@ define () ->
         leftBreakPoint = (arc, y0) ->
             if not arc.rbPrevious
                 return -Infinity
-            inters = parabolasIntersection arc.point, arc.rbPrevious.point, y0
-            
+            p1 = arc.point
+            p2 = arc.rbPrevious.point
+            inters = parabolasIntersection p1, p2, y0
+            if (p1.y - y0) <= (p2.y - y0) # a1=1/(y1-y0) >= a2=1/(y2-y0) - parabolas arcs
+                inters[0]
+            else
+                inters[1]
                 
 
         handleCircleEvent = (p) ->
